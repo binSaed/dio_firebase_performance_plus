@@ -14,9 +14,14 @@ import 'package:firebase_performance/firebase_performance.dart';
 /// I am not fully aware of [Dio] internal architecture.
 class DioFirebasePerformanceInterceptor extends Interceptor {
   DioFirebasePerformanceInterceptor({
+    this.accurateTiming = false,
     this.requestContentLengthMethod = defaultRequestContentLength,
     this.responseContentLengthMethod = defaultResponseContentLength,
   });
+
+  /// Using accurateTiming will add `await` to [start] method, is only necessary
+  /// when accurate timing is relevant.
+  final bool accurateTiming;
 
   /// key: requestKey hash code, value: ongoing metric
   final _map = <int, HttpMetric>{};
@@ -35,7 +40,13 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
       final requestKey = options.extra.hashCode;
       _map[requestKey] = metric;
       final requestContentLength = requestContentLengthMethod(options);
-      await metric.start();
+
+      if (accurateTiming) {
+        await metric.start();
+      } else {
+        metric.start();
+      }
+
       if (requestContentLength != null) {
         metric.requestPayloadSize = requestContentLength;
       }
