@@ -50,7 +50,7 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
       final requestKey = response.requestOptions.extra.hashCode;
       final metric = _map[requestKey];
       metric?.setResponse(response, responseContentLengthMethod);
-      await metric?.stop();
+      metric?.stop();
       _map.remove(requestKey);
     } catch (_) {}
     return super.onResponse(response, handler);
@@ -62,7 +62,7 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
       final requestKey = err.requestOptions.extra.hashCode;
       final metric = _map[requestKey];
       metric?.setResponse(err.response, responseContentLengthMethod);
-      await metric?.stop();
+      metric?.stop();
       _map.remove(requestKey);
     } catch (_) {}
     return super.onError(err, handler);
@@ -70,6 +70,7 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
 }
 
 typedef RequestContentLengthMethod = int? Function(RequestOptions options);
+
 int? defaultRequestContentLength(RequestOptions options) {
   try {
     return options.headers.toString().length + options.data.toString().length;
@@ -79,6 +80,7 @@ int? defaultRequestContentLength(RequestOptions options) {
 }
 
 typedef ResponseContentLengthMethod = int? Function(Response options);
+
 int? defaultResponseContentLength(Response response) {
   try {
     String? lengthHeader = response.headers[Headers.contentLengthHeader]?.first;
