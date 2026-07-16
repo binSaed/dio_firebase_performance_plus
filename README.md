@@ -15,3 +15,7 @@ dio.interceptors.add(performanceInterceptor);
 ```
 
 __SUGGESTION:__ If you use dio client as a singleton you can use this interceptor as singleton as well.
+
+---
+
+Maintained by [Abdelrahman Saed](https://bnsaed.com/) — [more Flutter packages & case studies](https://bnsaed.com/projects/).
